@@ -32,22 +32,128 @@ export function BagIcon({ active = false }: { active?: boolean }) {
   );
 }
 
-export function GridIcon() {
+export function GridIcon({ active = false }: { active?: boolean }) {
+  const stroke = active ? "#1D1D1F" : "#6b7280";
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <rect x="4" y="4" width="6.5" height="6.5" rx="1.2" stroke="#6b7280" strokeWidth="1.7" />
-      <rect x="13.5" y="4" width="6.5" height="6.5" rx="1.2" stroke="#6b7280" strokeWidth="1.7" />
-      <rect x="4" y="13.5" width="6.5" height="6.5" rx="1.2" stroke="#6b7280" strokeWidth="1.7" />
-      <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.2" stroke="#6b7280" strokeWidth="1.7" />
+      <rect x="4" y="4" width="6.5" height="6.5" rx="1.2" fill={active ? "#c6e400" : "none"} stroke={stroke} strokeWidth="1.7" />
+      <rect x="13.5" y="4" width="6.5" height="6.5" rx="1.2" stroke={stroke} strokeWidth="1.7" />
+      <rect x="4" y="13.5" width="6.5" height="6.5" rx="1.2" stroke={stroke} strokeWidth="1.7" />
+      <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.2" stroke={stroke} strokeWidth="1.7" />
     </svg>
   );
 }
 
-export function SearchIcon({ className = "" }: { className?: string }) {
+export function ShareIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+      aria-hidden
+    >
+      <path
+        d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M16 6L12 2L8 6"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12 2V15"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function HeartIcon({ filled = false }: { filled?: boolean }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M12 20S4.5 15.2 4.5 9.8C4.5 7.2 6.5 5.5 8.8 5.5C10.2 5.5 11.4 6.2 12 7.2C12.6 6.2 13.8 5.5 15.2 5.5C17.5 5.5 19.5 7.2 19.5 9.8C19.5 15.2 12 20 12 20Z"
+        fill={filled ? "#e11d2a" : "none"}
+        stroke={filled ? "#e11d2a" : "currentColor"}
+        strokeWidth="1.7"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function SlidersIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M4 8H20M4 16H20" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <circle cx="9" cy="8" r="2.2" fill="white" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="15" cy="16" r="2.2" fill="white" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
+export function SortIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M8 6V18M8 6L5 9M8 6L11 9M16 18V6M16 18L13 15M16 18L19 15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function SearchIcon({
+  className = "",
+  size = 18,
+}: {
+  className?: string;
+  size?: number;
+}) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+      aria-hidden
+    >
+      <circle
+        cx="11"
+        cy="11"
+        r="6.75"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M16.2 16.2L21 21"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function MicIcon({ className = "" }: { className?: string }) {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className={className} aria-hidden>
-      <circle cx="11" cy="11" r="6.5" stroke="currentColor" strokeWidth="1.8" />
-      <path d="M16 16L20 20" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <rect x="9" y="3.5" width="6" height="10" rx="3" stroke="currentColor" strokeWidth="1.8" />
+      <path
+        d="M6.5 11.5C6.5 14.5 8.9 17 12 17C15.1 17 17.5 14.5 17.5 11.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <path d="M12 17V20.5M9 20.5H15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   );
 }
@@ -110,9 +216,9 @@ export function PlusIcon() {
   );
 }
 
-export function TruckIcon() {
+export function TruckIcon({ size = 22 }: { size?: number }) {
   return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
         d="M3 7H14V16H3V7Z"
         stroke="#1aa34a"

@@ -3,19 +3,42 @@ import type { ProductArt } from "@/lib/catalog";
 export function ProductThumb({
   art,
   size = "md",
+  image,
+  alt = "",
 }: {
   art: ProductArt;
-  size?: "sm" | "md";
+  size?: "sm" | "md" | "well" | "rail";
+  image?: string;
+  alt?: string;
 }) {
   const compact = size === "sm";
-  return (
-    <div
-      className={`flex items-center justify-center rounded-xl ${
-        compact
-          ? "h-12 w-12 rounded-full bg-[#f5f6f8]"
+  const well = size === "well";
+  const rail = size === "rail";
+  const wellClass = `flex items-center justify-center overflow-hidden rounded-xl ${
+    compact
+      ? "h-10 w-10 rounded-full bg-[#f5f6f8]"
+      : rail
+        ? "h-8 w-8 bg-transparent"
+        : well
+          ? "h-[136px] w-full bg-transparent"
           : "h-[132px] w-full bg-white ring-1 ring-black/[0.06]"
-      }`}
-    >
+  }`;
+
+  if (image) {
+    return (
+      <div className={wellClass}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={image}
+          alt={alt}
+          className={`h-full w-full ${compact ? "object-cover" : "object-contain"}`}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className={wellClass}>
       {art === "switch" && (
         <div className="h-16 w-12 rounded-md bg-white ring-1 ring-black/10">
           <div className="mx-auto mt-5 h-6 w-3 rounded-full bg-[#d1d5db]" />
@@ -117,6 +140,33 @@ export function ProductThumb({
       )}
       {art === "waterproof" && (
         <div className="h-14 w-8 rounded-sm bg-[#dc2626]" />
+      )}
+      {art === "steel" && (
+        <div className="flex items-end gap-1">
+          <div className="h-10 w-2 rounded-sm bg-[#9ca3af]" />
+          <div className="h-14 w-2 rounded-sm bg-[#6b7280]" />
+          <div className="h-12 w-2 rounded-sm bg-[#d1d5db]" />
+        </div>
+      )}
+      {art === "brick" && (
+        <div className="flex flex-col gap-0.5">
+          <div className="flex gap-0.5">
+            <div className="h-5 w-8 rounded-[2px] bg-[#c45c3e]" />
+            <div className="h-5 w-6 rounded-[2px] bg-[#a94432]" />
+          </div>
+          <div className="flex gap-0.5">
+            <div className="h-5 w-6 rounded-[2px] bg-[#b4533a]" />
+            <div className="h-5 w-8 rounded-[2px] bg-[#d97757]" />
+          </div>
+        </div>
+      )}
+      {art === "door" && (
+        <div className="relative h-16 w-10 rounded-sm bg-[#a56a32]">
+          <div className="absolute right-1 top-1/2 h-2 w-2 rounded-full bg-[#d2a05c]" />
+        </div>
+      )}
+      {art === "helmet" && (
+        <div className="h-10 w-14 rounded-t-full bg-[#facc15]" />
       )}
       {art === "generic" && (
         <div className="h-12 w-12 rounded-md bg-[#e5e7eb]" />

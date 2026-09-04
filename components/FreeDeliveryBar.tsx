@@ -1,28 +1,30 @@
 import { TruckIcon } from "@/components/icons";
+import { FREE_DELIVERY_MIN } from "@/lib/catalog";
 
-export function FreeDeliveryBar({
-  title = "Unlock free delivery",
-  detail = "Shop for ₹2000",
+function rupees(amount: number) {
+  return `₹${amount.toLocaleString("en-IN")}`;
+}
+
+export function EmptyDeliveryCard({
+  title = `Add items worth ${rupees(FREE_DELIVERY_MIN)}`,
+  detail = "to get free delivery",
 }: {
   title?: string;
   detail?: string;
 }) {
   return (
-    <>
-      <div className="h-16 shrink-0" aria-hidden />
-      <div className="fixed bottom-[calc(3.75rem+env(safe-area-inset-bottom))] left-1/2 z-30 w-full max-w-[430px] -translate-x-1/2 px-4 pb-2">
-        <div className="flex items-center gap-3 rounded-full border border-[#b7e3c2] bg-[#e7f8ea] px-3 py-2.5 shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white">
-            <TruckIcon />
-          </span>
-          <span>
-            <span className="block text-[14px] font-bold text-[#1aa34a]">
-              {title}
-            </span>
-            <span className="block text-[12px] text-kowi-muted">{detail}</span>
-          </span>
-        </div>
-      </div>
-    </>
+    <div className="pointer-events-auto flex h-[60px] w-fit items-center gap-2.5 rounded-full border border-[#b7e3c2] bg-[#e7f8ea]/95 py-2.5 pl-2.5 pr-4 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white">
+        <TruckIcon size={26} />
+      </span>
+      <span className="min-w-0 text-[#1aa34a]">
+        <span className="block whitespace-nowrap text-[12px] font-semibold leading-4">
+          {title}
+        </span>
+        <span className="block whitespace-nowrap text-[11px] font-normal leading-4">
+          {detail}
+        </span>
+      </span>
+    </div>
   );
 }

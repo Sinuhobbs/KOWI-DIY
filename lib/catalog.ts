@@ -3,8 +3,9 @@ export const FREE_DELIVERY_MIN = 2000;
 export type Category = {
   id: string;
   name: string;
+  shortLabel?: string;
   isNew?: boolean;
-  art: "cement" | "tile" | "paint" | "wood" | "glue" | "electrical" | "bath" | "hinge" | "lock" | "tool" | "pipe" | "waterproof";
+  art: "cement" | "tile" | "paint" | "wood" | "glue" | "electrical" | "bath" | "hinge" | "lock" | "tool" | "pipe" | "waterproof" | "steel" | "brick" | "door" | "safety";
 };
 
 export type ProductArt =
@@ -30,6 +31,10 @@ export type ProductArt =
   | "tool"
   | "pipe"
   | "waterproof"
+  | "steel"
+  | "brick"
+  | "door"
+  | "helmet"
   | "generic";
 
 export type Subcategory = {
@@ -52,6 +57,7 @@ export type Product = {
   pack?: string;
   options?: number;
   art: ProductArt;
+  image?: string;
 };
 
 export const CATEGORIES: Category[] = [
@@ -59,14 +65,78 @@ export const CATEGORIES: Category[] = [
   { id: "tiling", name: "Tiling & Grouts", art: "tile" },
   { id: "paints", name: "Paints & Putty", art: "paint", isNew: true },
   { id: "plywood", name: "Plywood & MDF", art: "wood" },
-  { id: "adhesives", name: "Fevicol & Adhesives", art: "glue" },
-  { id: "electricals", name: "Electricals & Lights", art: "electrical" },
-  { id: "bath", name: "Bath Fittings and Sanitaryware", art: "bath" },
-  { id: "furniture", name: "Furniture Fittings & Accessories", art: "hinge" },
-  { id: "locks", name: "Locks & Hardware", art: "lock" },
-  { id: "tools", name: "Power Tools & Accessories", art: "tool" },
-  { id: "pipes", name: "Pipes & Fittings", art: "pipe" },
-  { id: "waterproof", name: "Waterproofing & Chemicals", art: "waterproof" },
+  { id: "adhesives", name: "Fevicol & Adhesives", shortLabel: "Adhesives", art: "glue" },
+  { id: "electricals", name: "Electricals & Lights", shortLabel: "Electricals", art: "electrical" },
+  { id: "bath", name: "Bath Fittings and Sanitaryware", shortLabel: "Bath Fittings", art: "bath" },
+  { id: "furniture", name: "Furniture Fittings & Accessories", shortLabel: "Furniture Fittings", art: "hinge" },
+  { id: "locks", name: "Locks & Handles", art: "lock" },
+  { id: "tools", name: "Hardware & Tools", shortLabel: "Hardware", art: "tool" },
+  { id: "pipes", name: "Plumbing Pipes & Fittings", shortLabel: "Pipes", art: "pipe" },
+  { id: "waterproof", name: "Waterproofing & Repairing", shortLabel: "Waterproofing", art: "waterproof" },
+  { id: "safety", name: "Safety & Workwear", shortLabel: "Safety", art: "safety" },
+  { id: "steel", name: "Steel & TMT", art: "steel" },
+  { id: "bricks", name: "Bricks & Blocks", art: "brick" },
+  { id: "doors", name: "Doors & Windows", art: "door" },
+];
+
+export const HOME_CATEGORY_IDS = [
+  "cement",
+  "tiling",
+  "paints",
+  "plywood",
+  "adhesives",
+  "electricals",
+  "bath",
+  "furniture",
+  "locks",
+  "tools",
+  "pipes",
+  "waterproof",
+  "safety",
+] as const;
+
+export const HOME_NEW_PRODUCT_IDS = ["el-ecolink-fan", "el-ecolink-led"] as const;
+
+const PHOTO_CATEGORY_IDS = new Set<string>(HOME_CATEGORY_IDS);
+
+export function categoryImage(category: Category) {
+  if (!PHOTO_CATEGORY_IDS.has(category.id)) return undefined;
+  return `/catalog/categories/${category.id}.png`;
+}
+
+export const CATEGORY_GROUPS: {
+  title: string;
+  columns: 3 | 4;
+  ids: string[];
+}[] = [
+  {
+    title: "Core materials",
+    columns: 4,
+    ids: [
+      "cement",
+      "steel",
+      "bricks",
+      "waterproof",
+      "tiling",
+      "paints",
+      "plywood",
+      "adhesives",
+    ],
+  },
+  {
+    title: "Home & hardware",
+    columns: 3,
+    ids: [
+      "electricals",
+      "bath",
+      "furniture",
+      "locks",
+      "pipes",
+      "doors",
+      "tools",
+      "safety",
+    ],
+  },
 ];
 
 export const SUBCATEGORIES: Record<string, Subcategory[]> = {
@@ -124,6 +194,7 @@ export const SUBCATEGORIES: Record<string, Subcategory[]> = {
     { id: "all", name: "All", art: "lock" },
     { id: "padlock", name: "Padlocks", art: "lock" },
     { id: "door", name: "Door Locks", art: "lock" },
+    { id: "handles", name: "Handles", art: "lock" },
   ],
   tools: [
     { id: "all", name: "All", art: "tool" },
@@ -139,6 +210,26 @@ export const SUBCATEGORIES: Record<string, Subcategory[]> = {
     { id: "all", name: "All", art: "waterproof" },
     { id: "coat", name: "Coatings", art: "waterproof" },
     { id: "chem", name: "Chemicals", art: "waterproof" },
+  ],
+  steel: [
+    { id: "all", name: "All", art: "steel" },
+    { id: "tmt", name: "TMT Bars", art: "steel" },
+    { id: "binding", name: "Binding Wire", art: "steel" },
+  ],
+  bricks: [
+    { id: "all", name: "All", art: "brick" },
+    { id: "aac", name: "AAC Blocks", art: "brick" },
+    { id: "red", name: "Red Bricks", art: "brick" },
+  ],
+  doors: [
+    { id: "all", name: "All", art: "door" },
+    { id: "flush", name: "Flush Doors", art: "door" },
+    { id: "windows", name: "Windows", art: "door" },
+  ],
+  safety: [
+    { id: "all", name: "All", art: "helmet" },
+    { id: "head", name: "Helmets", art: "helmet" },
+    { id: "ppe", name: "PPE", art: "helmet" },
   ],
 };
 
@@ -178,6 +269,8 @@ export const PRODUCTS: Product[] = [
   { id: "el-heat-15", categoryId: "electricals", subcategoryId: "heater", brand: "Havells", name: "15L Storage Water Heater", sku: "WH15", price: 6490, mrp: 8990, unit: "piece", art: "heater" },
   { id: "el-bell-1", categoryId: "electricals", subcategoryId: "alarm", brand: "Anchor", name: "Wireless Door Bell with 38 Tunes", sku: "DB38", price: 449, mrp: 699, unit: "piece", art: "doorbell" },
   { id: "el-fan-1", categoryId: "electricals", subcategoryId: "fans", brand: "Havells", name: "1200mm Ceiling Fan (White)", sku: "FAN1200", price: 1899, mrp: 2499, unit: "piece", options: 2, art: "fan" },
+  { id: "el-ecolink-fan", categoryId: "electricals", subcategoryId: "fans", brand: "EcoLink", name: "AirTurbo BLDC Ceiling Fan with Remote (White, 1200 MM)", sku: "AT1200", price: 2845, mrp: 4500, unit: "piece", options: 2, art: "fan", image: "/catalog/products/ecolink-fan.png" },
+  { id: "el-ecolink-led", categoryId: "electricals", subcategoryId: "led", brand: "EcoLink", name: "3in1 Surface LED Full Glow Ceiling Light (15W)", sku: "SFG15", price: 430, mrp: 555, unit: "piece", art: "bulb", image: "/catalog/products/ecolink-led.png" },
 
   { id: "ba-tap", categoryId: "bath", subcategoryId: "taps", brand: "Jaquar", name: "Pillar Cock Basin Tap", sku: "JQ101", price: 1290, mrp: 1890, unit: "piece", options: 2, art: "bath" },
   { id: "ba-mixer", categoryId: "bath", subcategoryId: "taps", brand: "Hindware", name: "Wall Mixer with Crutch", sku: "HW88", price: 2450, mrp: 3200, unit: "piece", art: "bath" },
@@ -202,10 +295,30 @@ export const PRODUCTS: Product[] = [
   { id: "wp-lw", categoryId: "waterproof", subcategoryId: "coat", brand: "Dr. Fixit", name: "LW+ Waterproofing Liquid", sku: "DF5", price: 890, mrp: 1120, bulkPrice: 850, unit: "can", pack: "5 L", art: "waterproof" },
   { id: "wp-pid", categoryId: "waterproof", subcategoryId: "coat", brand: "Pidilite", name: "Roof Waterproof Coating", sku: "PR20", price: 2450, mrp: 3100, unit: "bucket", pack: "20 L", art: "waterproof" },
   { id: "wp-sika", categoryId: "waterproof", subcategoryId: "chem", brand: "Sika", name: "Cemflex Integral Liquid", sku: "SK1", price: 340, mrp: 420, unit: "litre", pack: "1 L", art: "waterproof" },
+
+  { id: "st-tata", categoryId: "steel", subcategoryId: "tmt", brand: "Tata Tiscon", name: "TMT Bar Fe 500D", sku: "TT12", price: 68, mrp: 78, bulkPrice: 64, unit: "kg", pack: "12 mm", options: 4, art: "steel" },
+  { id: "st-jsw", categoryId: "steel", subcategoryId: "tmt", brand: "JSW Neosteel", name: "TMT Bar Fe 550D", sku: "JSW16", price: 71, mrp: 82, unit: "kg", pack: "16 mm", art: "steel" },
+  { id: "st-bind", categoryId: "steel", subcategoryId: "binding", brand: "Tata", name: "Binding Wire", sku: "TBW1", price: 89, mrp: 110, unit: "kg", pack: "1 kg", art: "steel" },
+
+  { id: "br-aac", categoryId: "bricks", subcategoryId: "aac", brand: "Birla Aerocon", name: "AAC Block", sku: "BA600", price: 48, mrp: 62, bulkPrice: 44, unit: "piece", pack: "600x200x100", options: 3, art: "brick" },
+  { id: "br-red", categoryId: "bricks", subcategoryId: "red", brand: "Local Kiln", name: "Red Clay Brick", sku: "RB1", price: 9, mrp: 12, unit: "piece", art: "brick" },
+  { id: "br-solid", categoryId: "bricks", subcategoryId: "aac", brand: "Magicrete", name: "Solid Concrete Block", sku: "MC400", price: 36, mrp: 48, unit: "piece", pack: "400x200x100", art: "brick" },
+
+  { id: "dr-flush", categoryId: "doors", subcategoryId: "flush", brand: "Greenply", name: "BWP Flush Door", sku: "GF32", price: 2890, mrp: 3650, unit: "piece", pack: "32 mm", options: 2, art: "door" },
+  { id: "dr-century", categoryId: "doors", subcategoryId: "flush", brand: "Century", name: "Waterproof Flush Door", sku: "CF30", price: 2650, mrp: 3290, unit: "piece", pack: "30 mm", art: "door" },
+  { id: "dr-upvc", categoryId: "doors", subcategoryId: "windows", brand: "Fenesta", name: "UPVC Sliding Window", sku: "FN4", price: 8990, mrp: 11200, unit: "piece", pack: "4 ft", art: "door" },
+
+  { id: "sf-helm", categoryId: "safety", subcategoryId: "head", brand: "Karam", name: "Safety Helmet", sku: "KH1", price: 249, mrp: 349, unit: "piece", options: 3, art: "helmet" },
+  { id: "sf-mask", categoryId: "safety", subcategoryId: "ppe", brand: "3M", name: "N95 Dust Respirator", sku: "3M8210", price: 89, mrp: 129, unit: "piece", pack: "pack of 1", art: "helmet" },
+  { id: "sf-glove", categoryId: "safety", subcategoryId: "ppe", brand: "Karam", name: "Cut Resistant Gloves", sku: "KG5", price: 199, mrp: 280, unit: "pair", art: "helmet" },
 ];
 
 export function getCategory(id: string) {
   return CATEGORIES.find((item) => item.id === id);
+}
+
+export function categoryLabel(category: Category) {
+  return category.shortLabel ?? category.name;
 }
 
 export function getProduct(id: string) {
@@ -257,7 +370,6 @@ export function discountPercent(price: number, mrp: number) {
 }
 
 export function productTitle(product: Product) {
-  return product.pack
-    ? `${product.brand} ${product.name} (${product.pack})`
-    : `${product.brand} ${product.name}`;
+  const spec = product.pack ? ` (${product.pack})` : "";
+  return `${product.brand} ${product.name}${spec} [${product.sku}]`;
 }

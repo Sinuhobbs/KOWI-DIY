@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MobileShell } from "@/components/MobileShell";
 import { ProductCard } from "@/components/ProductCard";
@@ -8,6 +8,7 @@ import { ListingDock } from "@/components/ListingDock";
 import { groupProductsByCategory, searchCatalog } from "@/lib/catalog";
 import { searchServices } from "@/lib/services";
 import { ServiceArt } from "@/components/ServiceArt";
+import { useScrollChrome } from "@/lib/scrollChrome";
 import Link from "next/link";
 
 export default function SearchPage() {
@@ -29,8 +30,14 @@ function SearchScreen() {
   const searchParams = useSearchParams();
   const categoryId = searchParams.get("category") ?? undefined;
   const serviceMode = searchParams.get("mode") === "services";
-  const [query, setQuery] = useState("");
+  const qParam = searchParams.get("q") ?? "";
+  const [query, setQuery] = useState(qParam);
   const [searchFocused, setSearchFocused] = useState(true);
+  const { hidden: chromeHidden, onScroll } = useScrollChrome();
+
+  useEffect(() => {
+    setQuery(qParam);
+  }, [qParam]);
 
   const groups = useMemo(() => {
     const products = searchCatalog(query, categoryId);
@@ -85,7 +92,10 @@ function SearchScreen() {
           </label>
         </header>
 
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain bg-white px-3 pb-6">
+        <div
+          className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain bg-white px-3 pb-20"
+          onScroll={onScroll}
+        >
           {showHint ? (
             <p className="px-2 pt-6 text-[14px] text-kowi-muted">
               Try cement, paint, switch, pipe, or a brand name.
@@ -133,7 +143,9 @@ function SearchScreen() {
           )}
         </div>
 
-        {searchFocused || serviceMode ? null : <ListingDock />}
+        {searchFocused || serviceMode ? null : (
+          <ListingDock hidden={chromeHidden} lift />
+        )}
       </div>
     </MobileShell>
   );

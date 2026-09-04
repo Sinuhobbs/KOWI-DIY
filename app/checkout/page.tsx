@@ -101,7 +101,11 @@ export default function CheckoutPage() {
                 >
                   <div className="flex gap-3">
                     <div className="h-[72px] w-[72px] overflow-hidden rounded-xl">
-                      <ProductThumb art={product.art} />
+                      <ProductThumb
+                        art={product.art}
+                        image={product.image}
+                        alt={productTitle(product)}
+                      />
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-[15px] font-bold leading-5">

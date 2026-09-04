@@ -1,11 +1,26 @@
 import type { Category } from "@/lib/catalog";
 
+const TONES: Record<Category["art"], string> = {
+  cement: "bg-[#f1ece1]",
+  tile: "bg-[#e7eef1]",
+  paint: "bg-[#e6eef8]",
+  wood: "bg-[#f3e9dc]",
+  glue: "bg-[#e7eef8]",
+  electrical: "bg-[#f4efd6]",
+  bath: "bg-[#eee6dc]",
+  hinge: "bg-[#eceef2]",
+  lock: "bg-[#f2ecd8]",
+  tool: "bg-[#e6eef6]",
+  pipe: "bg-[#eceff2]",
+  waterproof: "bg-[#f5e9e1]",
+  steel: "bg-[#e8eaee]",
+  brick: "bg-[#f3e6df]",
+  door: "bg-[#f0e6d8]",
+  safety: "bg-[#f5f0d4]",
+};
+
 function Tile({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="relative flex h-[78px] w-full items-end justify-center overflow-hidden rounded-xl bg-[#f4f5f7] px-1 pb-1">
-      {children}
-    </div>
-  );
+  return <>{children}</>;
 }
 
 function CementArt() {
@@ -126,6 +141,54 @@ function WaterproofArt() {
   );
 }
 
+function SteelArt() {
+  return (
+    <Tile>
+      <div className="mb-1 flex items-end gap-1">
+        <div className="h-10 w-2.5 rounded-sm bg-[#9ca3af]" />
+        <div className="h-12 w-2.5 rounded-sm bg-[#6b7280]" />
+        <div className="h-9 w-2.5 rounded-sm bg-[#d1d5db]" />
+        <div className="h-11 w-2.5 rounded-sm bg-[#4b5563]" />
+      </div>
+    </Tile>
+  );
+}
+
+function BrickArt() {
+  return (
+    <Tile>
+      <div className="mb-1 flex flex-col gap-0.5">
+        <div className="flex gap-0.5">
+          <div className="h-4 w-7 rounded-[2px] bg-[#c45c3e]" />
+          <div className="h-4 w-5 rounded-[2px] bg-[#a94432]" />
+        </div>
+        <div className="flex gap-0.5">
+          <div className="h-4 w-5 rounded-[2px] bg-[#b4533a]" />
+          <div className="h-4 w-7 rounded-[2px] bg-[#d97757]" />
+        </div>
+      </div>
+    </Tile>
+  );
+}
+
+function DoorArt() {
+  return (
+    <Tile>
+      <div className="relative mb-1 h-14 w-10 rounded-sm bg-[#a56a32]">
+        <div className="absolute right-1 top-1/2 h-2 w-2 rounded-full bg-[#d2a05c]" />
+      </div>
+    </Tile>
+  );
+}
+
+function SafetyArt() {
+  return (
+    <Tile>
+      <div className="mb-1 h-10 w-14 rounded-t-full bg-[#facc15]" />
+    </Tile>
+  );
+}
+
 const ART = {
   cement: CementArt,
   tile: TileArt,
@@ -139,9 +202,34 @@ const ART = {
   tool: ToolArt,
   pipe: PipeArt,
   waterproof: WaterproofArt,
+  steel: SteelArt,
+  brick: BrickArt,
+  door: DoorArt,
+  safety: SafetyArt,
 };
 
-export function CategoryArt({ art }: { art: Category["art"] }) {
+export function CategoryArt({
+  art,
+  image,
+}: {
+  art: Category["art"];
+  image?: string;
+}) {
+  if (image) {
+    return (
+      <div className="relative aspect-square w-full overflow-hidden rounded-[18px] bg-[#f4f5f7]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={image} alt="" className="h-full w-full object-cover" />
+      </div>
+    );
+  }
+
   const Art = ART[art];
-  return <Art />;
+  return (
+    <div
+      className={`relative flex aspect-square w-full items-end justify-center overflow-hidden rounded-[18px] px-1.5 pb-1.5 ${TONES[art]}`}
+    >
+      <Art />
+    </div>
+  );
 }

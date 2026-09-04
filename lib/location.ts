@@ -156,6 +156,14 @@ export function searchAreas(query: string) {
   );
 }
 
+export function deliveryMinutes(location: SavedLocation) {
+  const seed = [...(location.id || location.area)].reduce(
+    (n, ch) => n + ch.charCodeAt(0),
+    0,
+  );
+  return 20 + (seed % 16);
+}
+
 export function locationArea(location: SavedLocation) {
   if (location.area?.trim()) return location.area.trim();
   const parts = location.short
@@ -168,4 +176,16 @@ export function locationArea(location: SavedLocation) {
     return last;
   }
   return location.short;
+}
+
+export function locationPin(location: SavedLocation) {
+  const area = locationArea(location);
+  const house = location.short
+    .split(",")
+    .map((part) => part.trim())
+    .find(Boolean);
+  if (house && house.toLowerCase() !== area.toLowerCase()) {
+    return `${house}, ${area}`;
+  }
+  return area;
 }

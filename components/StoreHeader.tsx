@@ -5,13 +5,14 @@ import Link from "next/link";
 import { LocationSheet } from "@/components/LocationSheet";
 import {
   ChevronDown,
+  MicIcon,
   ProfileIcon,
   SearchIcon,
   WalletIcon,
 } from "@/components/icons";
 import {
   DEFAULT_LOCATION,
-  locationArea,
+  deliveryMinutes,
   readLocation,
   type SavedLocation,
 } from "@/lib/location";
@@ -49,6 +50,17 @@ export function StoreHeader({
   }, [collapsible]);
 
   const showPinned = collapsible && compact && !sheetOpen;
+  const searchBarClass =
+    "flex items-center gap-2.5 rounded-full border border-white bg-white/40 px-4 py-3 text-[14px] text-[#9aa0a8] shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_0_0_1px_rgba(29,29,31,0.12),0_2px_8px_rgba(29,29,31,0.06)] backdrop-blur-xl";
+
+  const searchInner = (
+    <>
+      <SearchIcon className="shrink-0 text-kowi-ink" />
+      <span className="min-w-0 flex-1 truncate">{searchPlaceholder}</span>
+      <span className="h-5 w-px shrink-0 bg-[#1D1D1F]/15" aria-hidden />
+      <MicIcon className="shrink-0 text-kowi-ink" />
+    </>
+  );
 
   return (
     <>
@@ -59,14 +71,14 @@ export function StoreHeader({
             onClick={() => setSheetOpen(true)}
             className="min-w-0 flex-1 text-left"
           >
-            <p className="text-[12px] text-kowi-ink/80">
-              Delivering in your area
+            <p className="text-[13px] font-bold leading-4 text-kowi-ink">
+              Kowi in
             </p>
-            <p className="text-[20px] font-bold leading-6 text-kowi-ink">
-              {locationArea(location)}
+            <p className="mt-0.5 text-[28px] font-extrabold leading-8 tracking-tight text-kowi-ink">
+              {deliveryMinutes(location)} minutes
             </p>
-            <p className="mt-1 flex items-center gap-1 truncate text-[13px] text-kowi-ink">
-              <span className="truncate">{location.full}</span>
+            <p className="mt-1 flex items-center gap-1 truncate text-[13px] font-semibold text-kowi-ink">
+              <span className="truncate">{location.short || location.area}</span>
               <ChevronDown />
             </p>
           </button>
@@ -96,10 +108,9 @@ export function StoreHeader({
         <Link
           ref={searchRef}
           href={searchHref}
-          className="mt-4 flex items-center gap-2 rounded-full bg-white px-4 py-3 text-[14px] text-[#9aa0a8]"
+          className={`mt-4 ${searchBarClass}`}
         >
-          <SearchIcon className="text-kowi-ink" />
-          {searchPlaceholder}
+          {searchInner}
         </Link>
       </header>
 
@@ -112,10 +123,9 @@ export function StoreHeader({
         <Link
           href={searchHref}
           tabIndex={showPinned ? 0 : -1}
-          className="mx-3 mb-2.5 mt-2 flex items-center gap-3 rounded-full border border-kowi-line bg-white px-4 py-3.5 text-[15px] font-medium text-[#9aa0a8] shadow-[0_1px_4px_rgba(0,0,0,0.04)]"
+          className={`mx-3 mb-2.5 mt-2 ${searchBarClass} py-3.5 text-[15px] font-medium`}
         >
-          <SearchIcon className="text-kowi-ink" />
-          {searchPlaceholder}
+          {searchInner}
         </Link>
       </div>
 

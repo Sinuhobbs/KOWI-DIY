@@ -33,7 +33,7 @@ export function BottomNav() {
             ) : item.id === "orders" ? (
               <BagIcon active={active} />
             ) : (
-              <GridIcon />
+              <GridIcon active={active} />
             )}
             <span
               className={`text-[11px] ${active ? "font-semibold text-kowi-ink" : "text-kowi-muted"}`}

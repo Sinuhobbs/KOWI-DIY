@@ -56,14 +56,14 @@ export function LocationSheet({
   }
 
   return (
-    <div className="absolute inset-0 z-40 flex flex-col justify-end">
+    <div className="absolute inset-0 z-40 flex flex-col justify-end" data-no-ptr>
       <button
         type="button"
         className="absolute inset-0 bg-black/40"
         aria-label="Close location picker"
         onClick={onClose}
       />
-      <div className="relative z-10 max-h-[78%] overflow-y-auto rounded-t-[28px] bg-white px-5 pb-8 pt-5">
+      <div className="relative z-10 max-h-[78%] overflow-y-auto rounded-t-[28px] bg-white px-5 pb-8 pt-5" data-no-ptr>
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-[20px] font-bold text-kowi-ink">
             {mode === "add" ? "Add new location" : "Select delivery location"}
