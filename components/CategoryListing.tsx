@@ -79,6 +79,8 @@ export function CategoryListing({ categoryId }: { categoryId: string }) {
     );
   }
 
+  const categoryName = category.name;
+
   function cycleSort() {
     setSort((current) =>
       current === "popular" ? "low" : current === "low" ? "high" : "popular",
@@ -89,7 +91,7 @@ export function CategoryListing({ categoryId }: { categoryId: string }) {
     const url = window.location.href;
     try {
       if (navigator.share) {
-        await navigator.share({ title: category.name, url });
+        await navigator.share({ title: categoryName, url });
       } else {
         await navigator.clipboard.writeText(url);
       }
