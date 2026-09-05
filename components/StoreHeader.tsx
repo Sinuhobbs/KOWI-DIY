@@ -5,11 +5,10 @@ import Link from "next/link";
 import { LocationSheet } from "@/components/LocationSheet";
 import {
   ChevronDown,
-  MicIcon,
   ProfileIcon,
-  SearchIcon,
   WalletIcon,
 } from "@/components/icons";
+import { SearchBarContent, searchBarClass } from "@/components/SearchBar";
 import {
   DEFAULT_LOCATION,
   deliveryMinutes,
@@ -58,9 +57,6 @@ export function StoreHeader({
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, []);
-
-  const searchBarClass =
-    "flex items-center gap-2.5 rounded-full border border-white bg-white/40 px-4 py-3 text-[14px] text-[#9aa0a8] shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_0_0_1px_rgba(29,29,31,0.12),0_2px_8px_rgba(29,29,31,0.06)] backdrop-blur-xl";
 
   return (
     <>
@@ -124,10 +120,9 @@ export function StoreHeader({
           />
         ) : null}
         <Link href={searchHref} className={`relative ${searchBarClass}`}>
-          <SearchIcon className="shrink-0 text-kowi-ink" />
-          <span className="min-w-0 flex-1 truncate">{searchPlaceholder}</span>
-          <span className="h-5 w-px shrink-0 bg-[#1D1D1F]/15" aria-hidden />
-          <MicIcon className="shrink-0 text-kowi-ink" />
+          <SearchBarContent>
+            <span className="min-w-0 flex-1 truncate">{searchPlaceholder}</span>
+          </SearchBarContent>
         </Link>
       </div>
 

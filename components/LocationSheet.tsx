@@ -14,6 +14,7 @@ import {
   PlusIcon,
   SearchIcon,
 } from "@/components/icons";
+import { searchBarClass } from "@/components/SearchBar";
 
 type Mode = "pick" | "add";
 
@@ -127,13 +128,13 @@ export function LocationSheet({
           </div>
         ) : (
           <>
-            <label className="mb-4 flex items-center gap-2 rounded-2xl border border-kowi-line px-3 py-3">
-              <SearchIcon className="text-kowi-ink" />
+            <label className={`mb-4 ${searchBarClass}`}>
+              <SearchIcon className="shrink-0 text-kowi-ink" />
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search for area, street name..."
-                className="w-full bg-transparent text-[15px] outline-none placeholder:text-[#b0b4ba]"
+                className="min-w-0 flex-1 bg-transparent text-[14px] text-kowi-ink outline-none placeholder:text-[#9aa0a8]"
               />
             </label>
 

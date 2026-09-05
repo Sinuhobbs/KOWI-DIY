@@ -8,6 +8,7 @@ import { ListingDock } from "@/components/ListingDock";
 import { groupProductsByCategory, searchCatalog } from "@/lib/catalog";
 import { searchServices } from "@/lib/services";
 import { ServiceArt } from "@/components/ServiceArt";
+import { SearchBarContent, searchBarClass } from "@/components/SearchBar";
 import { useScrollChrome } from "@/lib/scrollChrome";
 import Link from "next/link";
 
@@ -53,13 +54,13 @@ function SearchScreen() {
   return (
     <MobileShell>
       <div className="flex h-full min-h-0 flex-col overflow-hidden bg-[#fbf8ee]">
-        <header className="sticky top-0 z-20 shrink-0 bg-[#fbf8ee] px-3 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))]">
-          <label className="flex items-center gap-1 rounded-full border border-[#e4e2d8] bg-white px-1.5 py-1.5 shadow-[0_1px_0_rgba(0,0,0,0.02)]">
+        <header className="sticky top-0 z-20 shrink-0 bg-white px-4 pb-2.5 pt-[max(0.75rem,env(safe-area-inset-top))]">
+          <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => router.back()}
               aria-label="Go back"
-              className="flex h-9 w-9 shrink-0 items-center justify-center text-kowi-ink"
+              className="flex h-11 w-11 shrink-0 items-center justify-center text-kowi-ink"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path
@@ -71,25 +72,29 @@ function SearchScreen() {
                 />
               </svg>
             </button>
-            <input
-              autoFocus
-              type="search"
-              enterKeyHint="search"
-              autoComplete="off"
-              autoCorrect="off"
-              spellCheck={false}
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              onFocus={() => setSearchFocused(true)}
-              onBlur={() => setSearchFocused(false)}
-              placeholder={
-                serviceMode
-                  ? "Search for services..."
-                  : "Search for products, categories..."
-              }
-              className="w-full bg-transparent text-[15px] outline-none placeholder:text-[#b0b4ba] [&::-webkit-search-cancel-button]:hidden"
-            />
-          </label>
+            <label className={`min-w-0 flex-1 ${searchBarClass}`}>
+              <SearchBarContent>
+                <input
+                  autoFocus
+                  type="search"
+                  enterKeyHint="search"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  onFocus={() => setSearchFocused(true)}
+                  onBlur={() => setSearchFocused(false)}
+                  placeholder={
+                    serviceMode
+                      ? "Search for services..."
+                      : "What do you need today?"
+                  }
+                  className="min-w-0 flex-1 bg-transparent text-[14px] text-kowi-ink outline-none placeholder:text-[#9aa0a8] [&::-webkit-search-cancel-button]:hidden"
+                />
+              </SearchBarContent>
+            </label>
+          </div>
         </header>
 
         <div
