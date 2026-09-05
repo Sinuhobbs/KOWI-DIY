@@ -13,11 +13,17 @@
 
 html,
 body {
-  min-height: 100%;
-  background: #e8e8e8;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: #ffffff;
 }
 
 body {
+  position: fixed;
+  inset: 0;
+  width: 100%;
   color: var(--color-kowi-ink);
   font-family: var(--font-sans);
 }

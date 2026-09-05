@@ -106,9 +106,9 @@ export function CategoryListing({ categoryId }: { categoryId: string }) {
   const deliveryPlace = locationPin(location) || "your area";
 
   return (
-    <MobileShell className="h-dvh max-h-dvh overflow-hidden">
+    <MobileShell>
       <div className="flex h-full min-h-0 flex-col overflow-hidden bg-white">
-        <header className="sticky top-0 z-20 flex min-h-[70px] w-full shrink-0 items-center justify-between gap-2 border-b border-[#eeeeee] bg-white px-3 py-3.5">
+        <header className="sticky top-0 z-20 flex min-h-[70px] w-full shrink-0 items-center justify-between gap-2 border-b border-[#eeeeee] bg-white px-3 py-3.5 pt-[max(0.875rem,env(safe-area-inset-top))]">
           <div className="flex min-w-0 flex-1 items-center gap-0.5">
             <button
               type="button"

@@ -22,10 +22,10 @@ export function MobileShell({
   });
 
   return (
-    <div className="min-h-dvh bg-[#e8e8e8]">
+    <div className="fixed inset-0 overflow-hidden bg-[#e8e8e8]">
       <div
         ref={rootRef}
-        className={`relative mx-auto flex min-h-dvh w-full max-w-[430px] flex-col bg-white ${className}`}
+        className={`relative mx-auto flex h-full w-full max-w-[430px] flex-col overflow-y-auto overscroll-y-contain bg-white ${className}`}
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}

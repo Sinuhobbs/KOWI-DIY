@@ -64,7 +64,7 @@ export function StoreHeader({
 
   return (
     <>
-      <header className="bg-[linear-gradient(180deg,#d8f59a_0%,#f3fbe0_42%,#ffffff_100%)] px-4 pb-2 pt-4">
+      <header className="bg-[linear-gradient(180deg,#d8f59a_0%,#f3fbe0_42%,#ffffff_100%)] px-4 pb-2 pt-[max(1rem,env(safe-area-inset-top))]">
         <div className="flex items-start justify-between gap-3">
           <button
             type="button"

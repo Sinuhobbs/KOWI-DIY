@@ -30,7 +30,7 @@ export default function OrdersPage() {
   );
 
   return (
-    <MobileShell className="h-dvh max-h-dvh overflow-hidden">
+    <MobileShell>
       <div className="flex h-full min-h-0 flex-col overflow-hidden bg-white">
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain">
           <StoreHeader />

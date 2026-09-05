@@ -51,9 +51,9 @@ function SearchScreen() {
   const showHint = !query.trim() && !categoryId && !serviceMode;
 
   return (
-    <MobileShell className="h-dvh max-h-dvh overflow-hidden">
+    <MobileShell>
       <div className="flex h-full min-h-0 flex-col overflow-hidden bg-[#fbf8ee]">
-        <header className="sticky top-0 z-20 shrink-0 bg-[#fbf8ee] px-3 pb-2 pt-3">
+        <header className="sticky top-0 z-20 shrink-0 bg-[#fbf8ee] px-3 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))]">
           <label className="flex items-center gap-1 rounded-full border border-[#e4e2d8] bg-white px-1.5 py-1.5 shadow-[0_1px_0_rgba(0,0,0,0.02)]">
             <button
               type="button"
