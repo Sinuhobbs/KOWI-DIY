@@ -18,19 +18,29 @@ import {
 } from "@/lib/location";
 import { useProfile } from "@/lib/profile";
 
+function nearestScroller(node: HTMLElement | null) {
+  let current = node?.parentElement ?? null;
+  while (current && current !== document.body) {
+    const overflowY = window.getComputedStyle(current).overflowY;
+    if (overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay") {
+      return current;
+    }
+    current = current.parentElement;
+  }
+  return null;
+}
+
 export function StoreHeader({
   searchHref = "/search",
   searchPlaceholder = "What do you need today?",
-  collapsible = false,
 }: {
   searchHref?: string;
   searchPlaceholder?: string;
-  collapsible?: boolean;
 }) {
   const [location, setLocation] = useState<SavedLocation>(DEFAULT_LOCATION);
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [compact, setCompact] = useState(false);
-  const searchRef = useRef<HTMLAnchorElement>(null);
+  const [stuck, setStuck] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
   const { photo } = useProfile();
 
   useEffect(() => {
@@ -38,33 +48,23 @@ export function StoreHeader({
   }, []);
 
   useEffect(() => {
-    if (!collapsible) return;
-    const el = searchRef.current;
-    if (!el) return;
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const root = nearestScroller(sentinel);
     const observer = new IntersectionObserver(
-      ([entry]) => setCompact(!entry.isIntersecting),
-      { threshold: 0, rootMargin: "-8px 0px 0px 0px" },
+      ([entry]) => setStuck(!entry.isIntersecting),
+      { root, threshold: 0 },
     );
-    observer.observe(el);
+    observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [collapsible]);
+  }, []);
 
-  const showPinned = collapsible && compact && !sheetOpen;
   const searchBarClass =
     "flex items-center gap-2.5 rounded-full border border-white bg-white/40 px-4 py-3 text-[14px] text-[#9aa0a8] shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_0_0_1px_rgba(29,29,31,0.12),0_2px_8px_rgba(29,29,31,0.06)] backdrop-blur-xl";
 
-  const searchInner = (
-    <>
-      <SearchIcon className="shrink-0 text-kowi-ink" />
-      <span className="min-w-0 flex-1 truncate">{searchPlaceholder}</span>
-      <span className="h-5 w-px shrink-0 bg-[#1D1D1F]/15" aria-hidden />
-      <MicIcon className="shrink-0 text-kowi-ink" />
-    </>
-  );
-
   return (
     <>
-      <header className="bg-[linear-gradient(180deg,#d8f59a_0%,#f3fbe0_42%,#ffffff_100%)] px-4 pb-2 pt-[max(1rem,env(safe-area-inset-top))]">
+      <div className="bg-[linear-gradient(180deg,#d8f59a_0%,#f3fbe0_55%,#ffffff_100%)] px-4 pt-[max(1rem,env(safe-area-inset-top))]">
         <div className="flex items-start justify-between gap-3">
           <button
             type="button"
@@ -104,28 +104,30 @@ export function StoreHeader({
             </Link>
           </div>
         </div>
+      </div>
 
-        <Link
-          ref={searchRef}
-          href={searchHref}
-          className={`mt-4 ${searchBarClass}`}
-        >
-          {searchInner}
-        </Link>
-      </header>
+      <div ref={sentinelRef} className="h-px w-full" aria-hidden />
 
       <div
-        className={`fixed left-1/2 top-0 z-50 w-full max-w-[430px] -translate-x-1/2 bg-white/95 pt-[env(safe-area-inset-top)] shadow-[0_8px_24px_rgba(0,0,0,0.08)] backdrop-blur-md transition-transform duration-200 ease-out ${
-          showPinned ? "translate-y-0" : "pointer-events-none -translate-y-full"
+        className={`sticky z-20 px-4 pb-2.5 pt-4 ${
+          stuck
+            ? "bg-[#d8f59a] shadow-[0_8px_20px_rgba(0,0,0,0.06)]"
+            : "bg-white"
         }`}
-        aria-hidden={!showPinned}
+        style={{ top: "env(safe-area-inset-top)" }}
       >
-        <Link
-          href={searchHref}
-          tabIndex={showPinned ? 0 : -1}
-          className={`mx-3 mb-2.5 mt-2 ${searchBarClass} py-3.5 text-[15px] font-medium`}
-        >
-          {searchInner}
+        {stuck ? (
+          <div
+            className="pointer-events-none absolute inset-x-0 top-0 -translate-y-full bg-[#d8f59a]"
+            style={{ height: "env(safe-area-inset-top)" }}
+            aria-hidden
+          />
+        ) : null}
+        <Link href={searchHref} className={`relative ${searchBarClass}`}>
+          <SearchIcon className="shrink-0 text-kowi-ink" />
+          <span className="min-w-0 flex-1 truncate">{searchPlaceholder}</span>
+          <span className="h-5 w-px shrink-0 bg-[#1D1D1F]/15" aria-hidden />
+          <MicIcon className="shrink-0 text-kowi-ink" />
         </Link>
       </div>
 

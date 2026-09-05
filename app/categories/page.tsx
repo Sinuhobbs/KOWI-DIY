@@ -18,10 +18,7 @@ export default function CategoriesIndexPage() {
     <MobileShell>
       <div className="flex h-full min-h-0 flex-col overflow-hidden bg-white">
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain">
-          <StoreHeader
-            collapsible
-            searchPlaceholder={'Search "cement"'}
-          />
+          <StoreHeader searchPlaceholder={'Search "cement"'} />
 
           {CATEGORY_GROUPS.map((group) => (
             <section key={group.title} className="px-4 pt-5">
