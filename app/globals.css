@@ -17,7 +17,8 @@ body {
   height: 100dvh;
   overflow: hidden;
   overscroll-behavior: none;
-  background: #ffffff;
+  background: #d8f59a;
+  color-scheme: light;
 }
 
 body {
