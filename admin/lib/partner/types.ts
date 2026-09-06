@@ -49,6 +49,9 @@ export type OrderLine = {
   name: string;
   image: string;
   qty: number;
+  sku?: string;
+  price?: number;
+  unit?: string;
 };
 
 export type ActiveOrder = {
@@ -62,6 +65,59 @@ export type ActiveOrder = {
   items: OrderLine[];
   readyInSec?: number;
   prepTotalSec?: number;
+  customer?: string;
+  phone?: string;
+  payment?: "UPI" | "Cash" | "Online";
+  note?: string;
+};
+
+export type InventoryAvailability = "available" | "unavailable";
+
+export type InventoryApprovalStatus = "pending" | "approved" | "rejected";
+
+export type InventoryCategory = {
+  id: string;
+  name: string;
+};
+
+export type InventoryItem = {
+  id: string;
+  categoryId: string;
+  subcategoryId: string;
+  brand: string;
+  name: string;
+  sku: string;
+  description: string;
+  unit: string;
+  pack?: string;
+  quantity: number;
+  rate: number;
+  mrp: number;
+  availability: InventoryAvailability;
+  image?: string;
+  art: string;
+  options?: number;
+  lowThreshold?: number;
+};
+
+export type InventoryDraft = {
+  quantity: number;
+  rate: number;
+  description: string;
+  availability: InventoryAvailability;
+};
+
+export type InventoryChangeRequest = {
+  id: string;
+  itemId: string;
+  status: InventoryApprovalStatus;
+  submittedAt: string;
+  changes: Partial<InventoryDraft>;
+};
+
+export type InventoryCategoryState = {
+  live: InventoryAvailability;
+  pending?: InventoryAvailability;
 };
 
 export type InventoryAlert = {

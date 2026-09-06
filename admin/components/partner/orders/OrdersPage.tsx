@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { MOCK_DASHBOARD } from "@/lib/partner/mockDashboard";
 import { ORDERS_TABS, ordersInTab, type OrdersTab } from "@/lib/partner/orders";
+import { useScrollLinkedHeader } from "@/lib/partner/useScrollLinkedHeader";
 import type { ActiveOrder, StoreStatus } from "@/lib/partner/types";
 import { DashboardHeader } from "@/components/partner/DashboardHeader";
 import { OrderCard } from "@/components/partner/orders/OrderCard";
@@ -21,6 +22,7 @@ export function OrdersPage() {
   const [orders, setOrders] = useState<ActiveOrder[]>(() =>
     structuredClone(MOCK_DASHBOARD.activeOrders),
   );
+  const { headerRef, stickRef, onScroll } = useScrollLinkedHeader();
 
   useEffect(() => {
     const saved = window.localStorage.getItem(STATUS_KEY);
@@ -75,13 +77,18 @@ export function OrdersPage() {
 
   return (
     <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-white">
-      <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain">
-        <DashboardHeader
-          store={MOCK_DASHBOARD.store}
-          status={status}
-          notifications={MOCK_DASHBOARD.notifications}
-        />
-        <div className="sticky top-0 z-20 grid grid-cols-3 border-b border-kowi-line bg-white px-2 pb-1 pt-2">
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain" onScroll={onScroll}>
+        <div ref={headerRef} className="sticky top-0 z-30">
+          <DashboardHeader
+            store={MOCK_DASHBOARD.store}
+            status={status}
+            notifications={MOCK_DASHBOARD.notifications}
+          />
+        </div>
+        <div
+          ref={stickRef}
+          className="sticky top-0 z-20 grid grid-cols-3 border-b border-kowi-line bg-white"
+        >
           {ORDERS_TABS.map((item) => {
             const active = tab === item.id;
             const count = counts[item.id];
@@ -90,7 +97,7 @@ export function OrdersPage() {
                 key={item.id}
                 type="button"
                 onClick={() => setTab(item.id)}
-                className={`relative flex items-center justify-center gap-1 px-1 py-1 text-[12px] font-bold leading-4 outline-none ${
+                className={`relative flex h-14 items-center justify-center gap-1 px-1 text-[12px] font-bold leading-4 outline-none ${
                   active ? "text-kowi-ink" : "text-kowi-muted"
                 }`}
               >
@@ -105,7 +112,7 @@ export function OrdersPage() {
                   </span>
                 ) : null}
                 {active ? (
-                  <span className="absolute inset-x-3 bottom-0 h-[3px] rounded-full bg-kowi-lime" />
+                  <span className="absolute inset-x-3 bottom-0 h-1 rounded-t bg-kowi-lime" />
                 ) : null}
               </button>
             );

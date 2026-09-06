@@ -1,15 +1,81 @@
 import type { ActiveOrder, DashboardData, OrderLine } from "./types";
 
-const THUMBS: OrderLine[] = [
-  { id: "t-paint", name: "Asian Paints Interior Emulsion 10L", image: "/partner/paints.png", qty: 2 },
-  { id: "t-pipe", name: "Astral PVC Pipe 20 mm", image: "/partner/pipes.png", qty: 4 },
-  { id: "t-led", name: "EcoLink Surface LED 15W", image: "/partner/led.png", qty: 3 },
-  { id: "t-switch", name: "Anchor Penta 6A Switch", image: "/partner/electricals.png", qty: 2 },
-  { id: "t-tool", name: "Bosch 10mm Impact Drill", image: "/partner/tools.png", qty: 1 },
+const CATALOG: OrderLine[] = [
+  { id: "t-paint", name: "Asian Paints Interior Emulsion 10L", image: "/partner/paints.png", qty: 2, sku: "AP-IE10", price: 2780, unit: "can" },
+  { id: "t-pipe", name: "Astral PVC Pipe 20 mm", image: "/partner/pipes.png", qty: 4, sku: "AS20", price: 145, unit: "length" },
+  { id: "t-led", name: "EcoLink Surface LED 15W", image: "/partner/led.png", qty: 3, sku: "SFG15", price: 430, unit: "piece" },
+  { id: "t-switch", name: "Anchor Penta 6A Switch", image: "/partner/electricals.png", qty: 2, sku: "2527", price: 45, unit: "piece" },
+  { id: "t-tool", name: "Bosch 10mm Impact Drill", image: "/partner/tools.png", qty: 1, sku: "GSB10", price: 2490, unit: "piece" },
+  { id: "t-wire", name: "Polycab 2.5 sq.mm House Wire", image: "/partner/led.png", qty: 2, sku: "PC25", price: 186, unit: "coil" },
+  { id: "t-elbow", name: "Astral PVC Elbow 20 mm", image: "/partner/pipes.png", qty: 6, sku: "PVC20E", price: 28, unit: "piece" },
+  { id: "t-plug", name: "Anchor 6A Multi Plug", image: "/partner/electricals.png", qty: 2, sku: "3155W", price: 80, unit: "piece" },
 ];
 
+const DETAILS: Record<
+  string,
+  Pick<ActiveOrder, "customer" | "phone" | "payment" | "note">
+> = {
+  "ord-2874": {
+    customer: "Rajesh Kumar",
+    phone: "9876543210",
+    payment: "UPI",
+    note: "Call before delivery. Leave at the shop gate if closed.",
+  },
+  "ord-2841": {
+    customer: "Neha Sharma",
+    phone: "9811122233",
+    payment: "Online",
+  },
+  "ord-2840": {
+    customer: "Amit Verma",
+    phone: "9900011122",
+    payment: "Cash",
+  },
+  "ord-2839": {
+    customer: "Sanjay Gupta",
+    phone: "9876500111",
+    payment: "UPI",
+  },
+  "ord-2838": {
+    customer: "Priya Nair",
+    phone: "9845012345",
+    payment: "Online",
+    note: "Need this packed by 11 AM.",
+  },
+  "ord-2836": {
+    customer: "Mohit Yadav",
+    phone: "9711112233",
+    payment: "Cash",
+  },
+  "ord-2835": {
+    customer: "Kavita Singh",
+    phone: "9822003344",
+    payment: "UPI",
+  },
+  "ord-2832": {
+    customer: "Vikram Joshi",
+    phone: "9765432100",
+    payment: "Online",
+  },
+};
+
+function expandItems(count: number): OrderLine[] {
+  return Array.from({ length: count }, (_, index) => {
+    const base = CATALOG[index % CATALOG.length];
+    return {
+      ...base,
+      id: `${base.id}-${index + 1}`,
+      qty: base.qty + (index % 3),
+    };
+  });
+}
+
 function withItems(order: Omit<ActiveOrder, "items">, count: number): ActiveOrder {
-  return { ...order, items: THUMBS.slice(0, Math.min(4, count)) };
+  return {
+    ...order,
+    ...DETAILS[order.id],
+    items: expandItems(Math.max(count, order.itemCount)),
+  };
 }
 
 export const MOCK_DASHBOARD: DashboardData = {

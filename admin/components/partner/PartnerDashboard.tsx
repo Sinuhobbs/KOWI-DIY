@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { fetchPartnerDashboard } from "@/lib/partner/dashboardApi";
+import { useScrollLinkedHeader } from "@/lib/partner/useScrollLinkedHeader";
 import type { DashboardData, StoreStatus } from "@/lib/partner/types";
 import { DashboardHeader } from "@/components/partner/DashboardHeader";
 import { OverviewMetrics } from "@/components/partner/OverviewMetrics";
@@ -17,6 +18,7 @@ export function PartnerDashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [error, setError] = useState(false);
   const [status, setStatus] = useState<StoreStatus>("open");
+  const { headerRef, onScroll } = useScrollLinkedHeader();
 
   const load = useCallback(async () => {
     setError(false);
@@ -68,19 +70,23 @@ export function PartnerDashboard() {
   }
 
   return (
-    <>
-      <DashboardHeader
-        store={data.store}
-        status={status}
-        notifications={data.notifications}
-      />
-      <div className="flex flex-col gap-5 bg-white pb-4 pt-1">
-        <OverviewMetrics overview={data.overview} />
-        <QuickActions />
-        <AttentionSection items={data.attentionItems} />
-        <InventoryAlerts alerts={data.inventoryAlerts} />
-        <InsightBanner insight={data.insight} />
+    <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-white">
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain" onScroll={onScroll}>
+        <div ref={headerRef} className="sticky top-0 z-30">
+          <DashboardHeader
+            store={data.store}
+            status={status}
+            notifications={data.notifications}
+          />
+        </div>
+        <div className="flex flex-col gap-5 bg-white pb-4 pt-1">
+          <OverviewMetrics overview={data.overview} />
+          <QuickActions />
+          <AttentionSection items={data.attentionItems} />
+          <InventoryAlerts alerts={data.inventoryAlerts} />
+          <InsightBanner insight={data.insight} />
+        </div>
       </div>
-    </>
+    </div>
   );
 }
