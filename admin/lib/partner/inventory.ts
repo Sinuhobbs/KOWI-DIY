@@ -160,7 +160,7 @@ export function setItemAvailability(
   availability: InventoryAvailability,
 ) {
   const existing = pendingForItem(requests, item.id);
-  const merged = { ...existing?.changes, availability };
+  const merged: Partial<InventoryDraft> = { ...existing?.changes, availability };
   if (availability === item.availability) {
     delete merged.availability;
   }
