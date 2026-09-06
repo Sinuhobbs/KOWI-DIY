@@ -1,9 +1,30 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { InventoryAlert } from "@/lib/partner/types";
 
+const IGNORE_KEY = "kowi.partner.inventoryIgnored";
+
 export function InventoryAlerts({ alerts }: { alerts: InventoryAlert[] }) {
-  const featured = alerts.find((item) => item.status === "low") ?? alerts[0];
+  const [ignored, setIgnored] = useState<string[]>([]);
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(IGNORE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as unknown;
+      if (Array.isArray(parsed) && parsed.every((id) => typeof id === "string")) {
+        setIgnored(parsed);
+      }
+    } catch {
+      /* keep defaults */
+    }
+  }, []);
+
+  const visible = alerts.filter((item) => !ignored.includes(item.id));
+  const featured = visible.find((item) => item.status === "low") ?? visible[0];
 
   if (!featured) {
     return (
@@ -14,6 +35,12 @@ export function InventoryAlerts({ alerts }: { alerts: InventoryAlert[] }) {
     );
   }
 
+  function ignoreFeatured() {
+    const next = [...ignored, featured.id];
+    setIgnored(next);
+    window.localStorage.setItem(IGNORE_KEY, JSON.stringify(next));
+  }
+
   return (
     <section className="px-4">
       <div className="flex items-end justify-between">
@@ -22,33 +49,50 @@ export function InventoryAlerts({ alerts }: { alerts: InventoryAlert[] }) {
           View all
         </Link>
       </div>
-      <div className="mt-3 flex items-stretch gap-3 overflow-hidden rounded-[20px] border border-kowi-line bg-white p-3">
-        {featured.image ? (
-          <div className="relative aspect-square shrink-0 self-stretch overflow-hidden rounded-[10px] bg-[#f4f5f7]">
-            <Image src={featured.image} alt="" fill className="object-cover" sizes="72px" />
-          </div>
-        ) : null}
-        <p className="min-w-0 flex-1 self-center">
-          <span className="block truncate text-[13px] font-bold leading-4 text-kowi-ink">
-            {featured.name}
-          </span>
-          <span className="mt-0.5 block text-[12px] font-semibold leading-4 text-kowi-ink">
-            {featured.status === "out"
-              ? "Out of stock"
-              : `${featured.quantity} ${featured.unit} left`}
-          </span>
-          {featured.threshold ? (
-            <span className="mt-0.5 block text-[11px] leading-4 text-kowi-muted">
-              Reorder when below {featured.threshold}
-            </span>
+      <div className="mt-3 overflow-hidden rounded-[20px] border border-kowi-line bg-white p-3">
+        <div className="flex items-center gap-3">
+          {featured.image ? (
+            <div className="relative size-[72px] shrink-0 overflow-hidden rounded-[10px] bg-[#f4f5f7]">
+              <Image
+                src={featured.image}
+                alt={featured.name}
+                fill
+                className="object-cover"
+                sizes="72px"
+              />
+            </div>
           ) : null}
-        </p>
-        <Link
-          href="/partner/inventory"
-          className="shrink-0 self-center rounded-lg bg-kowi-ink px-2.5 py-1.5 text-[11px] font-bold leading-none text-white"
-        >
-          Update Stock
-        </Link>
+          <p className="min-w-0 flex-1">
+            <span className="block text-[13px] font-bold leading-4 text-kowi-ink">
+              {featured.name}
+            </span>
+            <span className="mt-0.5 block text-[12px] font-semibold leading-4 text-kowi-ink">
+              {featured.status === "out"
+                ? "Out of stock"
+                : `${featured.quantity} ${featured.unit} left`}
+            </span>
+            {featured.threshold ? (
+              <span className="mt-0.5 block text-[11px] leading-4 text-kowi-muted">
+                Reorder when below {featured.threshold}
+              </span>
+            ) : null}
+          </p>
+        </div>
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={ignoreFeatured}
+            className="rounded-lg bg-[#f4f5f7] px-3 py-2.5 text-[12px] font-bold leading-none text-kowi-ink"
+          >
+            Ignore
+          </button>
+          <Link
+            href="/partner/inventory"
+            className="flex items-center justify-center rounded-lg bg-kowi-ink px-3 py-2.5 text-[12px] font-bold leading-none text-white"
+          >
+            Update Stock
+          </Link>
+        </div>
       </div>
     </section>
   );

@@ -48,6 +48,7 @@ export type OrderLine = {
   id: string;
   name: string;
   image: string;
+  qty: number;
 };
 
 export type ActiveOrder = {
@@ -59,6 +60,8 @@ export type ActiveOrder = {
   value: number;
   status: Extract<OrderStatus, "NEW" | "PREPARING" | "READY">;
   items: OrderLine[];
+  readyInSec?: number;
+  prepTotalSec?: number;
 };
 
 export type InventoryAlert = {
