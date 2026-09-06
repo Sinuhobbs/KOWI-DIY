@@ -63,7 +63,7 @@ export function PartnerBottomNav() {
       <div className="fixed bottom-0 left-1/2 z-40 w-full max-w-[430px] -translate-x-1/2">
         <div ref={slideRef}>
           <nav
-            className={`grid grid-cols-5 border-t border-kowi-line bg-white px-1 pb-[calc(8px+env(safe-area-inset-bottom))] pt-2 ${
+            className={`flex justify-evenly border-t border-kowi-line bg-white px-2 pb-[calc(8px+env(safe-area-inset-bottom))] pt-2 ${
               compact ? "items-center" : "items-end"
             }`}
           >
@@ -92,13 +92,13 @@ function SellNavButton({ compact }: { compact: boolean }) {
     <Link
       href="/partner/sell"
       aria-label="Sell"
-      className="relative flex flex-col items-center justify-center"
+      className="relative flex shrink-0 flex-col items-center justify-center"
     >
       <span
-        className={`flex items-center justify-center overflow-hidden bg-kowi-lime text-kowi-ink transition-all ${morph} ${
+        className={`flex items-center justify-center overflow-hidden text-kowi-ink transition-all ${morph} ${
           compact
-            ? "mt-0 h-10 w-[4.6rem] gap-1 rounded-full px-3 shadow-none"
-            : "-mt-7 h-14 w-14 gap-0 rounded-full px-0 shadow-[0_8px_20px_rgba(0,0,0,0.12)]"
+            ? "mt-0 h-10 w-[4.6rem] gap-1 rounded-full border-2 border-kowi-lime bg-white px-3 shadow-none"
+            : "-mt-7 h-14 w-14 gap-0 rounded-full border-0 bg-kowi-lime px-0 shadow-[0_8px_20px_rgba(0,0,0,0.12)]"
         }`}
       >
         <span
@@ -149,7 +149,7 @@ function NavLink({
   children: ReactNode;
 }) {
   return (
-    <Link href={href} className="relative flex flex-col items-center gap-1">
+    <Link href={href} className="relative flex shrink-0 flex-col items-center gap-1">
       {children}
       {badge ? (
         <span className="absolute right-[18%] top-[-4px] min-w-4 rounded-full bg-kowi-ink px-1 text-center text-[10px] font-bold leading-4 text-white">
